@@ -1,3 +1,5 @@
+import { CanvasInitialHandle } from '../../CanvasHandles'
+
 import {
   CanvasInitialNodeContainer,
   CanvasInitialNodeContent,
@@ -6,7 +8,9 @@ import {
 export function CanvasInitialNode() {
   return (
     <CanvasInitialNodeContainer>
-      <CanvasInitialNodeContent />
+      <CanvasInitialNodeContent>
+        <CanvasInitialHandle />
+      </CanvasInitialNodeContent>
     </CanvasInitialNodeContainer>
   )
 }

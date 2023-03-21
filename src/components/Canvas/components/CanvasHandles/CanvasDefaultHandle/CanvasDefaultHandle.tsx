@@ -1,29 +1,17 @@
 import { Handle, Position } from 'reactflow'
 
+import { CanvasConnectorHandle } from '../CanvasConnectorHandle'
+
 import { CanvasDefaultHandleProps } from './CanvasDefaultHandle.types'
-import {
-  CanvasDefaultHandleElement,
-  CanvasDefaultHandleConnectContainer,
-  CanvasDefaultHandleConnectDot,
-  CanvasDefaultHandleConnectLine,
-  CanvasDefaultHandleConnectButton,
-} from './CanvasDefaultHandle.styles'
+import { CanvasDefaultHandleElement } from './CanvasDefaultHandle.styles'
 
 export function CanvasDefaultHandle({}: CanvasDefaultHandleProps) {
   return (
     <CanvasDefaultHandleElement>
       <Handle type="source" position={Position.Left} />
-
-      <CanvasDefaultHandleConnectContainer>
-        <CanvasDefaultHandleConnectDot />
-        <CanvasDefaultHandleConnectLine />
-        <CanvasDefaultHandleConnectButton
-          onClick={() => console.log('clicked')}
-        >
-          +
-        </CanvasDefaultHandleConnectButton>
-      </CanvasDefaultHandleConnectContainer>
-
+      <CanvasConnectorHandle
+        onClick={() => console.log('Clicked in CanvasDefaultHandle')}
+      />
       <Handle type="target" position={Position.Right} />
     </CanvasDefaultHandleElement>
   )
