@@ -2,6 +2,7 @@ import 'reactflow/dist/style.css'
 
 import ReactFlow, { Background, ConnectionMode, Controls } from 'reactflow'
 
+import { NODE_TYPES, EDGE_TYPES } from './Canvas.utils'
 import { CanvasProps } from './Canvas.types'
 
 export function Canvas({
@@ -14,6 +15,8 @@ export function Canvas({
   return (
     <ReactFlow
       fitView
+      nodeTypes={NODE_TYPES}
+      edgeTypes={EDGE_TYPES}
       nodes={nodes}
       edges={edges}
       onNodesChange={onNodesChange}
@@ -25,7 +28,7 @@ export function Canvas({
       }}
     >
       <Controls />
-      <Background gap={12} size={2} color="#c9c9c9" />
+      <Background color="transparent" />
     </ReactFlow>
   )
 }
