@@ -19,13 +19,18 @@ export const initialNodes: Node[] = [
     data: {},
     type: 'simple',
   },
+  {
+    id: '4',
+    position: { x: 1000, y: 550 },
+    data: {},
+    type: 'simple',
+  },
 ]
 
 export const initialEdges: Edge[] = [
   {
-    id: 'e1-2',
-    source: '1',
-    target: '2',
-    label: '',
+    id: 'e3-4',
+    source: '4',
+    target: '3',
   },
 ]
