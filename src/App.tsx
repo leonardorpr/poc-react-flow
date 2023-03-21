@@ -1,8 +1,12 @@
+import { ReactFlowProvider } from 'reactflow'
+
+import { Flow } from 'pages'
+
 function App() {
   return (
-    <main>
-      <h1>Hello World</h1>
-    </main>
+    <ReactFlowProvider>
+      <Flow />
+    </ReactFlowProvider>
   )
 }
 
