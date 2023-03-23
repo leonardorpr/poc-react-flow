@@ -1,9 +1,13 @@
 import { useCallback } from 'react'
 import { useNodesState, useEdgesState, addEdge, Connection } from 'reactflow'
 
-import { initialNodes, initialEdges } from './useFlow.utils'
+import { createFlow } from './useFlow.utils'
 
 export function useFlow() {
+  const { nodes: initialNodes, edges: initialEdges } = createFlow()
+
+  console.log(initialNodes)
+
   const [nodes, setNodes, handleNodesChange] = useNodesState(initialNodes)
   const [edges, setEdges, handleEdgesChange] = useEdgesState(initialEdges)
 
