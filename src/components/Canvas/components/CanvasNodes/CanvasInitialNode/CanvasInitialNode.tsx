@@ -1,3 +1,7 @@
+import { useFlow } from 'pages/Flow/hooks'
+
+import { NodeProps } from 'reactflow'
+
 import { CanvasInitialHandle } from '../../CanvasHandles'
 
 import {
@@ -5,11 +9,15 @@ import {
   CanvasInitialNodeContent,
 } from './CanvasInitialNode.styles'
 
-export function CanvasInitialNode() {
+export function CanvasInitialNode({ id, xPos, yPos }: NodeProps) {
+  const handleCreateNewNode = useFlow((state) => state.handleCreateNode)
+
   return (
     <CanvasInitialNodeContainer>
       <CanvasInitialNodeContent>
-        <CanvasInitialHandle />
+        <CanvasInitialHandle
+          onClick={() => handleCreateNewNode(id, xPos, yPos)}
+        />
       </CanvasInitialNodeContent>
     </CanvasInitialNodeContainer>
   )

@@ -1,42 +1,69 @@
-import { useCallback } from 'react'
-import { useNodesState, useEdgesState, addEdge, Connection } from 'reactflow'
+import { create } from 'zustand'
+
+import {
+  Connection,
+  EdgeChange,
+  NodeChange,
+  addEdge,
+  applyNodeChanges,
+  applyEdgeChanges,
+  Node,
+  Edge,
+} from 'reactflow'
+
+import { Flow } from './useFlow.types'
 
 import { initialNodes, initialEdges } from './useFlow.utils'
 
-export function useFlow() {
-  const [nodes, setNodes, handleNodesChange] = useNodesState(initialNodes)
-  const [edges, setEdges, handleEdgesChange] = useEdgesState(initialEdges)
+export const useFlow = create<Flow>((set, get) => ({
+  nodes: initialNodes,
+  edges: initialEdges,
+  handleCreateNode: (id: string, xPos: number, yPos: number) => {
+    const currentNodes = get().nodes
+    const currentEdges = get().edges
 
-  const handleConnect = useCallback(
-    (params: Connection) => {
-      return setEdges((eds) => addEdge(params, eds))
-    },
-    [setEdges],
-  )
+    const newNodeId = `${currentNodes.length + 1}`
 
-  const handleAddNode = useCallback(() => {
-    setNodes((nodes) => {
-      return [
-        ...nodes,
-        {
-          id: `${nodes.length + 1}`,
-          position: {
-            x: 750,
-            y: 350,
-          },
-          data: {},
-          type: 'default',
+    const nodes = [
+      ...currentNodes,
+      {
+        id: newNodeId,
+        position: {
+          x: xPos + 500,
+          y: yPos,
         },
-      ]
-    })
-  }, [])
+        data: {},
+        type: 'simple',
+      },
+    ]
 
-  return {
-    nodes,
-    edges,
-    handleAddNode,
-    handleConnect,
-    handleNodesChange,
-    handleEdgesChange,
-  }
-}
+    const edges = [
+      ...currentEdges,
+      {
+        id: `e${id}-${newNodeId}`,
+        source: newNodeId,
+        target: id,
+      },
+    ]
+
+    set({
+      nodes,
+      edges,
+    })
+  },
+  handleNodesChange: (changes: NodeChange[]) => {
+    set({
+      nodes: applyNodeChanges(changes, get().nodes),
+    })
+  },
+  handleEdgesChange: (changes: EdgeChange[]) => {
+    set({
+      edges: applyEdgeChanges(changes, get().edges),
+    })
+  },
+  handleConnect: (connection: Connection) => {
+    set({
+      edges: addEdge(connection, get().edges),
+    })
+  },
+}))

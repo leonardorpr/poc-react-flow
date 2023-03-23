@@ -1,1 +1,3 @@
-export interface CanvasInitialHandleProps {}
+export interface CanvasInitialHandleProps {
+  onClick(): void
+}
