@@ -7,17 +7,20 @@ import {
   addEdge,
   applyNodeChanges,
   applyEdgeChanges,
-  Node,
-  Edge,
 } from 'reactflow'
 
 import { Flow } from './useFlow.types'
 
-import { initialNodes, initialEdges } from './useFlow.utils'
+//import { initialNodes, initialEdges } from './useFlow.utils'
+import { createGraph } from 'utils/createGraph'
+
+const { nodes, edges } = createGraph()
+
+console.log({ nodes, edges })
 
 export const useFlow = create<Flow>((set, get) => ({
-  nodes: initialNodes,
-  edges: initialEdges,
+  nodes,
+  edges,
   handleCreateNode: (id: string, xPos: number, yPos: number) => {
     const currentNodes = get().nodes
     const currentEdges = get().edges

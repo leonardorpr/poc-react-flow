@@ -3,6 +3,7 @@ import { Canvas } from 'components'
 import { useFlow } from './hooks'
 
 import { FlowContainer } from './Flow.styles'
+import { createGraph } from 'utils/createGraph'
 
 export function Flow() {
   const nodes = useFlow((state) => state.nodes)

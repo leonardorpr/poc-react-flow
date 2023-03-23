@@ -9,6 +9,7 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "dagre": "^0.8.5",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "reactflow": "^11.6.1",
@@ -16,6 +17,7 @@
     "zustand": "^4.3.6"
   },
   "devDependencies": {
+    "@types/dagre": "^0.7.48",
     "@types/node": "^18.15.5",
     "@types/react": "^18.0.28",
     "@types/react-dom": "^18.0.11",
