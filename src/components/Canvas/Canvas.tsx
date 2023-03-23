@@ -24,7 +24,7 @@ export function Canvas({
       onConnect={onConnect}
       connectionMode={ConnectionMode.Loose}
       defaultEdgeOptions={{
-        type: 'default',
+        type: 'simple',
       }}
     >
       <Controls />
