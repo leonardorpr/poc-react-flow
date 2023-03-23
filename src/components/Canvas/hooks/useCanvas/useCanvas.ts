@@ -1,4 +1,4 @@
-import { useState, useMemo, useCallback } from 'react'
+import { useState, useCallback } from 'react'
 import { useReactFlow } from 'reactflow'
 
 export function useCanvas() {
@@ -6,21 +6,15 @@ export function useCanvas() {
 
   const [isInteractive, setIsInteractive] = useState(true)
 
-  const currentZoom = useMemo(() => getZoom(), [])
-
-  const handleZoomOut = useCallback(() => zoomOut(), [])
-
-  const handleZoomIn = useCallback(() => zoomIn(), [])
-
   const handleToggleInteraction = useCallback(() => {
     setIsInteractive((currentIsInteractive) => !currentIsInteractive)
   }, [])
 
   return {
-    currentZoom,
     isInteractive,
+    currentZoom: getZoom(),
     handleToggleInteraction,
-    handleZoomOut,
-    handleZoomIn,
+    handleZoomOut: zoomOut,
+    handleZoomIn: zoomIn,
   }
 }
