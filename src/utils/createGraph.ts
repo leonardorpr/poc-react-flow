@@ -3,66 +3,63 @@ import { Position } from 'reactflow'
 
 import { apiResponseMock } from 'utils/mock'
 
-function createNodes(
-  elements?: [],
-  positionStartsFrom: number = 0,
-  lastId: number = 0,
-  previousElement?: any,
-) {
-  const apiResponse: any[] = elements || apiResponseMock.root
-
-  const nodes: any[] = []
-  const edges: any[] = []
-
-  let flowPosition = positionStartsFrom
+function createIndexes(lastId = 0, elements = null) {
   let nodeId = lastId
 
-  apiResponse.forEach((element, index) => {
-    const currentElement = index === 0 ? previousElement : element
+  const data: any[] = elements || apiResponseMock.root
+  const parsedData: any[] = []
 
+  data.forEach((element) => {
+    if (element.rule === 'cond') {
+      parsedData.push({ ...element, nodeId })
+
+      nodeId++
+
+      const trueCondition = createIndexes(nodeId, element.true)
+      parsedData.push(...trueCondition.parsedData)
+
+      const falseCondition = createIndexes(trueCondition.nodeId, element.false)
+      parsedData.push(...falseCondition.parsedData)
+
+      nodeId = falseCondition.nodeId
+    }
+
+    if (element.rule === 'provider') {
+      parsedData.push({ ...element, nodeId })
+    }
+
+    nodeId++
+  })
+
+  return { nodeId, parsedData }
+}
+
+function createNodes(data: any[], previousElement?: any) {
+  const nodes: any[] = []
+
+  data.forEach((element) => {
     const newNode = {
-      id: nodeId.toString(),
+      id: element.nodeId,
       data: {
-        flowPosition: flowPosition,
         rule: element.rule,
-        previousElement: { ...currentElement, id: (lastId + index).toString() },
+        previousElement,
       },
       type: 'simple',
     }
 
     nodes.push(newNode)
 
-    nodeId++
-
     if (element.rule == 'cond') {
-      const trueFlow = createNodes(
-        element.true,
-        flowPosition + 1,
-        nodeId,
-        newNode,
-      )
-      const falseFlow = createNodes(
-        element.false,
-        flowPosition + 1,
-        trueFlow.lastId,
-        newNode,
-      )
+      const trueFlow = createNodes(element.true, newNode)
+      const falseFlow = createNodes(element.false, newNode)
 
       nodes.push(...trueFlow.nodes)
       nodes.push(...falseFlow.nodes)
-      // edges.push(...trueFlow.edges)
-      // edges.push(...falseFlow.edges)
-
-      nodeId = falseFlow.lastId
-      nodeId++
     }
-
-    flowPosition++
   })
 
   return {
     nodes,
-    lastId: nodeId,
   }
 }
 
@@ -91,7 +88,8 @@ export function createGraph() {
     return {}
   })
 
-  const { nodes } = createNodes()
+  const indexes = createIndexes()
+  const { nodes } = createNodes(indexes.parsedData)
   const { edges } = createEdges(nodes)
 
   nodes.forEach((node) => {
