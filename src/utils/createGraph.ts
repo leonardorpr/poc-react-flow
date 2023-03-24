@@ -45,12 +45,14 @@ function createIndexes(lastId = 0, elements = null) {
 function createNodes(data: any[], previousElement?: any) {
   const nodes: any[] = []
 
-  data.forEach((element) => {
+  data.forEach((element, index, arr) => {
+    const currentPreviousElement = index > 0 ? arr[index - 1] : previousElement
+
     const newNode = {
       id: element.nodeId.toString(),
       data: {
         rule: element.rule,
-        previousElement,
+        previousElement: currentPreviousElement,
       },
       type: 'simple',
     }
@@ -77,7 +79,10 @@ function createEdges(nodes: any[]) {
       return {}
     }
 
-    const source = node.data.previousElement?.id
+    const source =
+      node.data.previousElement.rule === 'provider'
+        ? node.data.previousElement?.nodeId.toString()
+        : node.data.previousElement?.id
     const target = node.id
 
     return {
@@ -87,7 +92,7 @@ function createEdges(nodes: any[]) {
     }
   })
 
-  return { edges: edges.filter((obj) => obj.id) }
+  return { edges }
 }
 
 export function createGraph() {
