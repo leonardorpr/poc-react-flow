@@ -9,6 +9,10 @@ function createIndexes(lastId = 0, elements = null) {
   const data: any[] = elements || apiResponseMock.root
   const parsedData: any[] = []
 
+  if (nodeId == 14) {
+    console.log(elements)
+  }
+
   data.forEach((element) => {
     if (element.rule === 'cond') {
       let newNode = { ...element, nodeId }
@@ -33,10 +37,10 @@ function createIndexes(lastId = 0, elements = null) {
     }
 
     if (element.rule === 'provider') {
-      parsedData.push({ ...element, nodeId })
-    }
+      parsedData.push({ ...element, nodeId: nodeId })
 
-    nodeId++
+      nodeId++
+    }
   })
 
   return { nodeId, parsedData }
@@ -72,10 +76,7 @@ function createNodes(data: any[], previousElement?: any) {
 }
 
 function createEdges(nodes: any[]) {
-  console.log(nodes)
-
   const edges = nodes.map((node) => {
-    // console.log(node)
     if (!node.data.previousElement) {
       return {}
     }
@@ -104,12 +105,9 @@ export function createGraph() {
   })
 
   const indexes = createIndexes()
-  // console.log(indexes.parsedData)
-  // console.log(apiResponseMock.root)
+
   const { nodes } = createNodes(indexes.parsedData)
-  // console.log(nodes)
   const { edges } = createEdges(nodes)
-  console.log(edges)
 
   nodes.forEach((node) => {
     graph.setNode(node.id, { width: NODE_WIDTH, height: NODE_HEIGHT })
@@ -122,7 +120,6 @@ export function createGraph() {
   dagre.layout(graph)
 
   nodes.forEach((node) => {
-    console.log(node)
     const nodeWithPosition = graph.node(node.id)
 
     node.targetPosition = Position.Left
