@@ -8,9 +8,9 @@ import { CanvasDefaultHandleElement } from './CanvasDefaultHandle.styles'
 export function CanvasDefaultHandle({ onClick }: CanvasDefaultHandleProps) {
   return (
     <CanvasDefaultHandleElement>
-      <Handle type="source" position={Position.Left} />
+      <Handle type="target" position={Position.Left} />
       <CanvasConnectorHandle onClick={onClick} />
-      <Handle type="target" position={Position.Right} />
+      <Handle type="source" position={Position.Right} />
     </CanvasDefaultHandleElement>
   )
 }

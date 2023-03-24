@@ -16,8 +16,6 @@ import { createGraph } from 'utils/createGraph'
 
 const { nodes, edges } = createGraph()
 
-console.log({ nodes, edges })
-
 export const useFlow = create<Flow>((set, get) => ({
   nodes,
   edges,

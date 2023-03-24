@@ -9,10 +9,6 @@ function createIndexes(lastId = 0, elements = null) {
   const data: any[] = elements || apiResponseMock.root
   const parsedData: any[] = []
 
-  if (nodeId == 14) {
-    console.log(elements)
-  }
-
   data.forEach((element) => {
     if (element.rule === 'cond') {
       let newNode = { ...element, nodeId }
@@ -51,7 +47,7 @@ function createNodes(data: any[], previousElement?: any) {
 
   data.forEach((element) => {
     const newNode = {
-      id: element.nodeId,
+      id: element.nodeId.toString(),
       data: {
         rule: element.rule,
         previousElement,
@@ -114,7 +110,7 @@ export function createGraph() {
   })
 
   edges.forEach((edge) => {
-    graph.setEdge(edge?.target, edge?.source)
+    graph.setEdge(edge?.source, edge?.target)
   })
 
   dagre.layout(graph)
