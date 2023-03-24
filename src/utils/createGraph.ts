@@ -11,15 +11,23 @@ function createIndexes(lastId = 0, elements = null) {
 
   data.forEach((element) => {
     if (element.rule === 'cond') {
-      parsedData.push({ ...element, nodeId })
+      let newNode = { ...element, nodeId }
 
       nodeId++
 
       const trueCondition = createIndexes(nodeId, element.true)
-      parsedData.push(...trueCondition.parsedData)
+      // parsedData.push(...trueCondition.parsedData)
 
       const falseCondition = createIndexes(trueCondition.nodeId, element.false)
-      parsedData.push(...falseCondition.parsedData)
+      // parsedData.push(...falseCondition.parsedData)
+
+      newNode = {
+        ...newNode,
+        true: trueCondition.parsedData,
+        false: falseCondition.parsedData,
+      }
+
+      parsedData.push(newNode)
 
       nodeId = falseCondition.nodeId
     }
@@ -64,9 +72,16 @@ function createNodes(data: any[], previousElement?: any) {
 }
 
 function createEdges(nodes: any[]) {
+  console.log(nodes)
+
   const edges = nodes.map((node) => {
-    const source = node.id
-    const target = node.data.previousElement?.id || node.id
+    // console.log(node)
+    if (!node.data.previousElement) {
+      return {}
+    }
+
+    const source = node.data.previousElement?.id
+    const target = node.id
 
     return {
       id: `e${source}-${target}`,
@@ -75,7 +90,7 @@ function createEdges(nodes: any[]) {
     }
   })
 
-  return { edges }
+  return { edges: edges.filter((obj) => obj.id) }
 }
 
 export function createGraph() {
@@ -89,8 +104,12 @@ export function createGraph() {
   })
 
   const indexes = createIndexes()
+  // console.log(indexes.parsedData)
+  // console.log(apiResponseMock.root)
   const { nodes } = createNodes(indexes.parsedData)
+  // console.log(nodes)
   const { edges } = createEdges(nodes)
+  console.log(edges)
 
   nodes.forEach((node) => {
     graph.setNode(node.id, { width: NODE_WIDTH, height: NODE_HEIGHT })
@@ -103,6 +122,7 @@ export function createGraph() {
   dagre.layout(graph)
 
   nodes.forEach((node) => {
+    console.log(node)
     const nodeWithPosition = graph.node(node.id)
 
     node.targetPosition = Position.Left
