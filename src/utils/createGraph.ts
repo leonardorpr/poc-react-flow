@@ -1,12 +1,12 @@
 import dagre from 'dagre'
 import { Position } from 'reactflow'
 
-import { apiResponseMock } from 'utils/mock'
+import { dataStructure } from 'utils/data'
 
 function createIndexes(lastId = 0, elements = null) {
   let nodeId = lastId
 
-  const data: any[] = elements || apiResponseMock.root
+  const data: any[] = elements || dataStructure.root
   const parsedData: any[] = []
 
   data.forEach((element) => {
@@ -16,10 +16,7 @@ function createIndexes(lastId = 0, elements = null) {
       nodeId++
 
       const trueCondition = createIndexes(nodeId, element.true)
-      // parsedData.push(...trueCondition.parsedData)
-
       const falseCondition = createIndexes(trueCondition.nodeId, element.false)
-      // parsedData.push(...falseCondition.parsedData)
 
       newNode = {
         ...newNode,

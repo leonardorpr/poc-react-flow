@@ -1,4 +1,4 @@
-export const apiResponseMock = {
+export const dataStructure = {
   root: [
     {
       rule: 'cond',
